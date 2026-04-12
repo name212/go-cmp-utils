@@ -163,6 +163,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -191,6 +198,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -219,6 +233,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -248,6 +269,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -276,6 +304,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 false,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -304,6 +339,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            false,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -332,6 +374,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -361,6 +410,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 true,
 					"add complex all annotations":                            true,
 					"add complex all annotations and labels":                 true,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -390,6 +446,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 false,
 					"add complex all annotations":                            false,
 					"add complex all annotations and labels":                 false,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -419,6 +482,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 false,
 					"add complex all annotations":                            false,
 					"add complex all annotations and labels":                 false,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -449,6 +519,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 false,
 					"add complex all annotations":                            false,
 					"add complex all annotations and labels":                 false,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 
@@ -477,6 +554,13 @@ func TestMapStringComparator(t *testing.T) {
 					"add complex all labels":                                 false,
 					"add complex all annotations":                            false,
 					"add complex all annotations and labels":                 false,
+					"complex change spec string":                             true,
+					"complex change full deep spec intKey":                   true,
+					"complex change spec innerInner.innerInnerKey":           true,
+					"complex change spec innerFirst.sub":                     true,
+					"complex change multiple spec keys":                      true,
+					"complex delete spec string":                             true,
+					"complex delete spec multiple keys":                      true,
 				}),
 			},
 		}
@@ -788,6 +872,111 @@ func createTestTuplesComplex(hasDiff map[string]bool) []mapsTuple {
 				}
 				m = setFieldMap(m, toLabels, "metadata", "labels")
 				return setFieldMap(m, toAnn, "metadata", "annotations")
+			}(),
+		},
+
+		{
+			name:  "complex change spec string",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "changed",
+					"spec",
+					"string",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex change full deep spec intKey",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, float64(22),
+					"spec",
+					"innerFirst",
+					"innerInner",
+					"innerInnerInner",
+					"intKey",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex change spec innerInner.innerInnerKey",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "changed",
+					"spec",
+					"innerFirst",
+					"innerInner",
+					"innerInnerKey",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex change spec innerFirst.sub",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "changed",
+					"spec",
+					"innerFirst",
+					"sub",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex change multiple spec keys",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = setField(m, "changed",
+					"spec",
+					"string",
+				)
+				m = setField(m, "changed",
+					"spec",
+					"innerFirst",
+					"sub",
+				)
+
+				return setField(m, float64(22),
+					"spec",
+					"innerFirst",
+					"innerInner",
+					"innerInnerInner",
+					"intKey",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex delete spec string",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "spec", "string")
+			}(),
+		},
+
+		{
+			name:  "complex delete spec multiple keys",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = deleteField(m, "spec", "string")
+				m = deleteField(m, "spec", "innerFirst", "sub")
+				return deleteField(m,
+					"spec",
+					"innerFirst",
+					"innerInner",
+					"innerInnerInner",
+					"intKey",
+				)
 			}(),
 		},
 	}
