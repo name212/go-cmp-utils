@@ -11,6 +11,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	utils "github.com/name212/go-cmp-utils"
 	"github.com/stretchr/testify/require"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 )
 
 func TestMapStringComparator(t *testing.T) {
@@ -136,6 +137,356 @@ func TestMapStringComparator(t *testing.T) {
 			})
 		}
 	})
+
+	t.Run("complex", func(t *testing.T) {
+		tests := []test{
+			{
+				name:  "empty paths",
+				paths: nil,
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  true,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip kind",
+				paths: [][]string{
+					{"kind"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    false,
+					"change complex name":                                    true,
+					"change complex labels":                                  true,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip name",
+				paths: [][]string{
+					{"metadata", "name"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    false,
+					"change complex labels":                                  true,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip name and kind",
+				paths: [][]string{
+					{"metadata", "name"},
+					{"kind"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    false,
+					"change complex name":                                    false,
+					"change complex labels":                                  true,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip labels",
+				paths: [][]string{
+					{"metadata", "labels"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  false,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       false,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              false,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 false,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip annotations",
+				paths: [][]string{
+					{"metadata", "annotations"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  true,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   false,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": false,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         false,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            false,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip one annotations",
+				paths: [][]string{
+					{"metadata", "annotations", "test.example.com/four"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  true,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        true,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip multiple labels",
+				paths: [][]string{
+					{"metadata", "labels", "test.example.com/first"},
+					{"metadata", "labels", "notExists"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  false,
+					"change complex annotations":                             true,
+					"change complex annotations and labels":                  true,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   true,
+					"delete complex first from labels":                       true,
+					"delete complex test.example.com/third from annotations": true,
+					"delete complex first from annotations and labels":       true,
+					"delete complex all labels":                              true,
+					"delete complex all annotations":                         true,
+					"delete complex all annotations and labels":              true,
+					"add complex all labels":                                 true,
+					"add complex all annotations":                            true,
+					"add complex all annotations and labels":                 true,
+				}),
+			},
+
+			{
+				name: "skip annotations and labels",
+				paths: [][]string{
+					{"metadata", "labels"},
+					{"metadata", "annotations"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  false,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  false,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   false,
+					"delete complex first from labels":                       false,
+					"delete complex test.example.com/third from annotations": false,
+					"delete complex first from annotations and labels":       false,
+					"delete complex all labels":                              false,
+					"delete complex all annotations":                         false,
+					"delete complex all annotations and labels":              false,
+					"add complex all labels":                                 false,
+					"add complex all annotations":                            false,
+					"add complex all annotations and labels":                 false,
+				}),
+			},
+
+			{
+				name: "skip annotations and labels change path order",
+				paths: [][]string{
+					{"metadata", "annotations"},
+					{"metadata", "labels"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    true,
+					"change complex labels":                                  false,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  false,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   false,
+					"delete complex first from labels":                       false,
+					"delete complex test.example.com/third from annotations": false,
+					"delete complex first from annotations and labels":       false,
+					"delete complex all labels":                              false,
+					"delete complex all annotations":                         false,
+					"delete complex all annotations and labels":              false,
+					"add complex all labels":                                 false,
+					"add complex all annotations":                            false,
+					"add complex all annotations and labels":                 false,
+				}),
+			},
+
+			{
+				name: "skip annotations and labels and name",
+				paths: [][]string{
+					{"metadata", "annotations"},
+					{"metadata", "name"},
+					{"metadata", "labels"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    false,
+					"change complex labels":                                  false,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  false,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   false,
+					"delete complex first from labels":                       false,
+					"delete complex test.example.com/third from annotations": false,
+					"delete complex first from annotations and labels":       false,
+					"delete complex all labels":                              false,
+					"delete complex all annotations":                         false,
+					"delete complex all annotations and labels":              false,
+					"add complex all labels":                                 false,
+					"add complex all annotations":                            false,
+					"add complex all annotations and labels":                 false,
+				}),
+			},
+
+			{
+				name: "skip metadata",
+				paths: [][]string{
+					{"metadata"},
+				},
+				maps: createTestTuplesComplex(map[string]bool{
+					"both nil":                                               false,
+					"both empty":                                             false,
+					"same complex":                                           false,
+					"change complex kind":                                    true,
+					"change complex name":                                    false,
+					"change complex labels":                                  false,
+					"change complex annotations":                             false,
+					"change complex annotations and labels":                  false,
+					"add complex notExists to labels":                        false,
+					"add complex notExists to annotations":                   false,
+					"delete complex first from labels":                       false,
+					"delete complex test.example.com/third from annotations": false,
+					"delete complex first from annotations and labels":       false,
+					"delete complex all labels":                              false,
+					"delete complex all annotations":                         false,
+					"delete complex all annotations and labels":              false,
+					"add complex all labels":                                 false,
+					"add complex all annotations":                            false,
+					"add complex all annotations and labels":                 false,
+				}),
+			},
+		}
+
+		for _, tt := range tests {
+			t.Run(tt.name, func(t *testing.T) {
+				runOverTuples(t, createPaths(tt), tt.maps)
+			})
+		}
+	})
 }
 
 func runOverTuples(t *testing.T, paths []utils.MapPath, tuples []mapsTuple) {
@@ -245,12 +596,214 @@ func createTestTuplesFlat(hasDiff map[string]bool) []mapsTuple {
 	return applyHasDiff(hasDiff, tuples)
 }
 
+func createTestTuplesComplex(hasDiff map[string]bool) []mapsTuple {
+	tuples := []mapsTuple{
+		{
+			name:   "both nil",
+			first:  nil,
+			second: nil,
+		},
+
+		{
+			name:   "both empty",
+			first:  make(mapAny),
+			second: make(mapAny),
+		},
+
+		{
+			name:   "same complex",
+			first:  prepareOverJSON(complexMap),
+			second: prepareOverJSON(complexMap),
+		},
+
+		{
+			name:  "change complex kind",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m["kind"] = "Another"
+				return m
+			}(),
+		},
+
+		{
+			name:  "change complex name",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "another-name", "metadata", "name")
+			}(),
+		},
+
+		{
+			name:  "change complex labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "changed", "metadata", "labels", "test.example.com/first")
+			}(),
+		},
+
+		{
+			name:  "change complex annotations",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "changed", "metadata", "annotations", "test.example.com/four")
+			}(),
+		},
+
+		{
+			name:  "change complex annotations and labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = setField(m, "changed", "metadata", "labels", "test.example.com/second")
+				return setField(m, "changed-ann", "metadata", "annotations", "first")
+			}(),
+		},
+
+		{
+			name:  "add complex notExists to labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "added", "metadata", "labels", "notExists")
+			}(),
+		},
+
+		{
+			name:  "add complex notExists to annotations",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return setField(m, "added", "metadata", "annotations", "notExists")
+			}(),
+		},
+
+		{
+			name:  "delete complex first from labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "labels", "first")
+			}(),
+		},
+
+		{
+			name:  "delete complex test.example.com/third from annotations",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "annotations", "test.example.com/third")
+			}(),
+		},
+
+		{
+			name:  "delete complex first from annotations and labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = deleteField(m, "metadata", "labels", "first")
+				return deleteField(m, "metadata", "annotations", "first")
+			}(),
+		},
+
+		{
+			name:  "delete complex all labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "labels")
+			}(),
+		},
+
+		{
+			name:  "delete complex all annotations",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "annotations")
+			}(),
+		},
+
+		{
+			name:  "delete complex all annotations and labels",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = deleteField(m, "metadata", "annotations")
+				return deleteField(m, "metadata", "labels")
+			}(),
+		},
+
+		{
+			name: "add complex all labels",
+			first: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "labels")
+			}(),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				toSet := map[string]any{
+					"first":                        "first-label",
+					"test.example.com/first-label": "label",
+				}
+				return setFieldMap(m, toSet, "metadata", "labels")
+			}(),
+		},
+
+		{
+			name: "add complex all annotations",
+			first: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "metadata", "annotations")
+			}(),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				toSet := map[string]any{
+					"first":                       "first-ann",
+					"test.example.com/second-ann": "ann",
+				}
+				return setFieldMap(m, toSet, "metadata", "annotations")
+			}(),
+		},
+
+		{
+			name: "add complex all annotations and labels",
+			first: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				m = deleteField(m, "metadata", "labels")
+				return deleteField(m, "metadata", "annotations")
+			}(),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				toAnn := map[string]any{
+					"first":                       "first-ann",
+					"test.example.com/second-ann": "ann",
+				}
+				toLabels := map[string]any{
+					"first":                        "first-label",
+					"test.example.com/first-label": "label",
+				}
+				m = setFieldMap(m, toLabels, "metadata", "labels")
+				return setFieldMap(m, toAnn, "metadata", "annotations")
+			}(),
+		},
+	}
+
+	return applyHasDiff(hasDiff, tuples)
+}
+
 func applyHasDiff(hasDiff map[string]bool, tuples []mapsTuple) []mapsTuple {
 	byName := make(map[string]*mapsTuple)
+
+	names := make([]string, 0, len(tuples))
 
 	for _, tt := range tuples {
 		ttt := tt
 		byName[tt.name] = &ttt
+		names = append(names, ttt.name)
 	}
 
 	hasDiffKeys := make(map[string]struct{})
@@ -265,10 +818,16 @@ func applyHasDiff(hasDiff map[string]bool, tuples []mapsTuple) []mapsTuple {
 	}
 
 	res := make([]mapsTuple, 0, len(byName))
-	for k, tt := range byName {
-		if _, ok := hasDiffKeys[k]; !ok {
-			panic(fmt.Sprintf("hasDiff name '%s' not found in tuples", k))
+	for _, name := range names {
+		if _, ok := hasDiffKeys[name]; !ok {
+			panic(fmt.Sprintf("hasDiff name '%s' not found in tuples", name))
 		}
+
+		tt, ok := byName[name]
+		if !ok {
+			panic(fmt.Sprintf("byNames name '%s' not found in tuples", name))
+		}
+
 		res = append(res, *tt)
 	}
 
@@ -276,9 +835,6 @@ func applyHasDiff(hasDiff map[string]bool, tuples []mapsTuple) []mapsTuple {
 }
 
 var (
-	mapNil   map[string]any = nil
-	mapEmpty                = make(map[string]any)
-
 	flatMap = map[string]any{
 		"first": "firstvall",
 		"int":   42,
@@ -447,6 +1003,25 @@ func prepareOverJSON(m mapAny) mapAny {
 	return prepared
 }
 
-func clone(m mapAny) mapAny {
-	return prepareOverJSON(m)
+func setField(m mapAny, v any, path ...string) mapAny {
+	err := unstructured.SetNestedField(m, v, path...)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot set %v to %v", path, v))
+	}
+
+	return m
+}
+
+func setFieldMap(m mapAny, v mapAny, path ...string) mapAny {
+	err := unstructured.SetNestedMap(m, v, path...)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot set %v to map %v", path, v))
+	}
+
+	return m
+}
+
+func deleteField(m mapAny, path ...string) mapAny {
+	unstructured.RemoveNestedField(m, path...)
+	return m
 }
