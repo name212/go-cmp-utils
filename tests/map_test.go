@@ -173,6 +173,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -211,6 +214,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -249,6 +255,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -288,6 +297,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -326,6 +338,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -364,6 +379,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -402,6 +420,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -441,6 +462,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -480,6 +504,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -519,6 +546,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -559,6 +589,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 
@@ -597,6 +630,9 @@ func TestMapStringComparator(t *testing.T) {
 					"complex add spec notExists key":                                   true,
 					"complex add notExists key to spec innerInnerInner and innerFirst": true,
 					"complex add change remove in spec":                                true,
+					"complex change conditions slice in status":                        true,
+					"complex add status":                                               true,
+					"complex change conditions slice and phase in status":              true,
 				}),
 			},
 		}
@@ -1074,6 +1110,73 @@ func createTestTuplesComplex(hasDiff map[string]bool) []mapsTuple {
 				)
 			}(),
 		},
+
+		{
+			name:  "complex change conditions slice in status",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				s := extractSlice[mapAny](m,
+					"status",
+					"conditions",
+				)
+
+				s[0] = mapAny{
+					"lastTransitionTime": "2026-03-11T08:11:21Z",
+					"status":             "False",
+					"type":               "Mount",
+				}
+
+				s = append(s, mapAny{
+					"lastTransitionTime": "2024-12-01T18:44:02Z",
+					"status":             "True",
+					"type":               "Ready",
+				})
+
+				return setFieldSlice(m, s,
+					"status",
+					"conditions",
+				)
+			}(),
+		},
+
+		{
+			name:  "complex change conditions slice and phase in status",
+			first: prepareOverJSON(complexMap),
+			second: func() mapAny {
+				m := prepareOverJSON(complexMap)
+
+				m = setField(m, "Running",
+					"status",
+					"phase",
+				)
+
+				s := extractSlice[mapAny](m,
+					"status",
+					"conditions",
+				)
+
+				s[0] = mapAny{
+					"lastTransitionTime": "2026-03-11T08:11:21Z",
+					"status":             "False",
+					"type":               "Mount",
+				}
+
+				return setFieldSlice(m, s,
+					"status",
+					"conditions",
+				)
+			}(),
+		},
+
+		{
+			name: "complex add status",
+			first: func() mapAny {
+				m := prepareOverJSON(complexMap)
+				return deleteField(m, "status")
+			}(),
+			second: prepareOverJSON(complexMap),
+		},
 	}
 
 	return applyHasDiff(hasDiff, tuples)
@@ -1184,6 +1287,7 @@ var (
 					"type":               "Error",
 				},
 			},
+			"version": 1,
 		},
 	}
 )
@@ -1300,6 +1404,50 @@ func setFieldMap(m mapAny, v mapAny, path ...string) mapAny {
 	err := unstructured.SetNestedMap(m, v, path...)
 	if err != nil {
 		panic(fmt.Sprintf("Cannot set %v to map %v", path, v))
+	}
+
+	return m
+}
+
+func extractSlice[T any](m mapAny, path ...string) []T {
+	s, exists, err := unstructured.NestedSlice(m, path...)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot get slice for %v: %v", path, err))
+	}
+
+	if !exists {
+		panic(fmt.Sprintf("slice not exists for %v", path))
+	}
+
+	res := make([]T, 0, len(s))
+
+	for i, v := range s {
+		typed, ok := v.(T)
+		if !ok {
+			panic(
+				fmt.Sprintf(
+					"cannot convert for %v val for index %d. Has type %T",
+					path,
+					i,
+					v,
+				),
+			)
+		}
+		res = append(res, typed)
+	}
+
+	return res
+}
+
+func setFieldSlice[T any](m mapAny, s []T, path ...string) mapAny {
+	converted := make([]any, 0, len(s))
+	for _, v := range s {
+		converted = append(converted, v)
+	}
+
+	err := unstructured.SetNestedSlice(m, converted, path...)
+	if err != nil {
+		panic(fmt.Sprintf("Cannot set %v as slice %v", path, s))
 	}
 
 	return m
