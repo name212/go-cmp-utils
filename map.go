@@ -10,13 +10,28 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
+// MapPathComparator
+// interface for compare key parts
 type MapPathComparator interface {
+	// Compare
+	// compare key part with index
 	Compare(indx int, keyPathPart string) bool
+	// Parts
+	// returns number of parts
 	Parts() int
 }
 
+// MapPath
+// alias to MapPathComparator
 type MapPath MapPathComparator
 
+// MapKeysFilter
+// returns go-cmp option for ignore golang map keys by path
+// Every MapPath are paths to keys
+// With it you can filter multiple keys by own path
+// For create MapPath you can use
+// NewMapPathStringComparator
+// MapPathReComparator
 func MapKeysFilter(paths ...MapPath) cmp.Option {
 	if len(paths) == 0 {
 		return filterOption(noFilter)
@@ -40,8 +55,26 @@ func MapKeysFilter(paths ...MapPath) cmp.Option {
 	return filterOption(composeFilter)
 }
 
+// MapPathStringComparator
+// implementation of MapPathComparator
+// This comparator compare every path part
+// as full string equals
 type MapPathStringComparator []string
 
+// NewMapPathStringComparator
+// creates MapPathStringComparator
+// parts is full path to key for filter
+// for example, for filter "second" key in map:
+//
+//	map[string]any {
+//	  "root": map[string]any{
+//	    "first": 42,
+//	    "second": "val",
+//	  }
+//	}
+//
+// you can use next call
+// NewMapPathStringComparator("root", "second")
 func NewMapPathStringComparator(parts ...string) MapPathStringComparator {
 	res := make(MapPathStringComparator, 0, len(parts))
 	res = append(res, parts...)
@@ -61,8 +94,65 @@ func (c MapPathStringComparator) Compare(indx int, keyPathPart string) bool {
 	return c[indx] == keyPathPart
 }
 
+var (
+	// SkipNotEmptyRe
+	// regexp for filter any not empty key
+	SkipNotEmptyRe = regexp.MustCompile(`.+`)
+	// SkipWithEmptyRe
+	// regexp for filter any key (include empty)
+	SkipWithEmptyRe = regexp.MustCompile(`.*`)
+)
+
+// RepeatCompileRe
+// compile regexp and create list of regexp with count len
+func RepeatCompileRe(r string, count int) ([]*regexp.Regexp, error) {
+	re, err := regexp.Compile(r)
+	if err != nil {
+		return nil, err
+	}
+
+	res := make([]*regexp.Regexp, count)
+	for i := range count {
+		res[i] = re
+	}
+
+	return res, nil
+}
+
+// RepeatRe
+// create list of regexp with count len
+func RepeatRe(r *regexp.Regexp, count int) []*regexp.Regexp {
+	res := make([]*regexp.Regexp, count)
+	for i := range count {
+		res[i] = r
+	}
+
+	return res
+}
+
+// MapPathReComparator
+// implementation of MapPathComparator
+// This comparator compare every path part as regexp match
 type MapPathReComparator []*regexp.Regexp
 
+// NewMapPathReComparator
+// creates MapPathReComparator
+// parts is regexp compatibility strings
+// all parts will compile to regexp
+// for example, for filter all keys "second" and "first" key
+// as single regexp in map:
+//
+//	map[string]any {
+//	  "root": map[string]any{
+//	    "first": 42,
+//	    "second": "val",
+//	    "another": []string{"hello"}
+//	  }
+//	}
+//
+// you can use next call
+// NewMapPathReComparator("root", "^(second|first)$")
+// function returns all compile errors as single error
 func NewMapPathReComparator(parts ...string) (MapPathReComparator, error) {
 	res := make(MapPathReComparator, 0, len(parts))
 
@@ -88,6 +178,9 @@ func NewMapPathReComparator(parts ...string) (MapPathReComparator, error) {
 	return nil, resError
 }
 
+// NewMapPathReComparator
+// creates MapPathReComparator
+// parts is regexp instances
 func NewMapPathReComparatorFromRe(parts ...*regexp.Regexp) MapPathReComparator {
 	res := make(MapPathReComparator, 0, len(parts))
 	res = append(res, parts...)
