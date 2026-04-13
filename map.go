@@ -217,27 +217,27 @@ func constructFilter(path MapPath) filter {
 		return noFilter
 	}
 
-	return func(p cmp.Path) bool {
-		if len(p) != 2*l {
+	return func(pp cmp.Path) bool {
+		ppLen := len(pp)
+
+		indexes := make([]string, 0, ppLen / 2)
+		for i := range ppLen {
+			index, ok := pp.Index(i).(cmp.MapIndex)
+			if ok {
+				indexes = append(indexes, index.Key().String())
+			}
+		}
+
+		if len(indexes) != l {
 			return false
 		}
 
-		result := true
-
 		for i := range l {
-			num := (2 * i) + 1
-			index, ok := p.Index(num).(cmp.MapIndex)
-			if !ok {
-				result = false
-				break
-			}
-
-			if !path.Compare(i, index.Key().String()) {
-				result = false
-				break
+			if !path.Compare(i, indexes[i]) {
+				return false
 			}
 		}
 
-		return result
+		return true
 	}
 }
