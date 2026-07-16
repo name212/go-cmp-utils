@@ -1,2 +1,1 @@
-test:
-	cd tests/ && go test -v -p 1 ./...
+include $(CURDIR)/makefile-go/include.mk.inc
