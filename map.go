@@ -220,7 +220,7 @@ func constructFilter(path MapPath) filter {
 	return func(pp cmp.Path) bool {
 		ppLen := len(pp)
 
-		indexes := make([]string, 0, ppLen / 2)
+		indexes := make([]string, 0, ppLen/2)
 		for i := range ppLen {
 			index, ok := pp.Index(i).(cmp.MapIndex)
 			if ok {
