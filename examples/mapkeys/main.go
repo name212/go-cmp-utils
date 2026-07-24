@@ -1,5 +1,6 @@
 package main
 
+//nolint:goimports
 import (
 	"fmt"
 	"regexp"
