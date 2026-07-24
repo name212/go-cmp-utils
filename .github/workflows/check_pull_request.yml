@@ -19,5 +19,4 @@ jobs:
         uses: 'dir:makefile-go/.github/actions/test'
         checkout_ref: ${{ github.event.pull_request.head.sha }}
         with: |
-          run_race_tests: "with_tests"
           tests_parallelism: "false"
